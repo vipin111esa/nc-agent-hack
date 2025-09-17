@@ -12,28 +12,13 @@ from tools.prompts import (
     check_eligibility_subagent_prompt_parallel,
     process_refund_subagent_prompt,
     root_agent_prompt,
+    root_agent_prompt,
     new_top_level_prompt
 )
 
 logger = logging.getLogger(__name__)
 
-#GEMINI_MODEL = "gemini-2.5-flash-preview-05-20"
-GEMINI_MODEL = os.getenv("MODEL")
-
-
-email_agent = Agent(
-    model=GEMINI_MODEL,
-    name="EmailSenderAgent",
-    description="Sends email using Gmail API",
-    instruction="""
-    You are an email assistant. Use the tool to send an email to the specified recipient.
-    Make sure to include a subject and a message body. Confirm once the email is sent.If you don't have the receiepnt's email id, pls ask user to provide receiepnt's email id.
-     
-    """,
-    tools=[send_email_tool],
-    output_key="email_status"
-)
-
+GEMINI_MODEL = "gemini-2.5-flash"
 
 purchase_verifier_agent = Agent(
     model=GEMINI_MODEL,
@@ -88,6 +73,7 @@ root_agent = Agent(
     instruction="""
     You are a multi agent system that coordinates sub-agents. Execute the following instructions in as few "turns" as you can, only prompting the user when needed. Coordinate the sub agents behind the scenes...
     """
+    + root_agent_prompt,
     + root_agent_prompt,
     sub_agents=[seq_agent],
 )

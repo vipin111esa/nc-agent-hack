@@ -51,6 +51,7 @@ top_level_prompt = """
                 - DAMAGED: Package arrived damaged, melted, or opened.
                 - LOST: Package never arrived or went missing in transit.  
                 - LATE: Package arrived late. 
+                - DELAYED: Package arrived late.
                 - OTHER: Any other reason, e.g. "It tasted gross."
             
 

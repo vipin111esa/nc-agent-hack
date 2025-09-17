@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 # Constants
 ELIGIBLE_SHIPPING_METHODS = ["INSURED"]
-ELIGIBLE_REASONS = ["DAMAGED", "NEVER_ARRIVED"]
+ELIGIBLE_REASONS = ["DAMAGED", "NEVER_ARRIVED", "LATE", "DELAYED"]
 
 
 def get_purchase_history(purchaser: str) -> List[Dict[str, Any]]:
