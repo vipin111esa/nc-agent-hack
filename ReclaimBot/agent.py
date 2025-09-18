@@ -1,7 +1,3 @@
-"""
-4 - Parallel Sub-Agent with Sequential parent-workflow
-"""
-
 import logging
 import os
 from google.adk.agents import Agent, SequentialAgent, ParallelAgent
@@ -11,13 +7,11 @@ from tools.prompts import (
     purchase_history_subagent_prompt,
     check_eligibility_subagent_prompt_parallel,
     process_refund_subagent_prompt,
-    root_agent_prompt,
-    new_top_level_prompt
+    root_agent_prompt
 )
 
 logger = logging.getLogger(__name__)
 
-#GEMINI_MODEL = "gemini-2.5-flash-preview-05-20"
 GEMINI_MODEL = os.getenv("MODEL")
 
 
@@ -62,7 +56,7 @@ refund_processor_agent = Agent(
     model=GEMINI_MODEL,
     name="RefundProcessorAgent",
     description="Processes refunds or provides rejection explanations",
-    instruction=new_top_level_prompt
+    instruction=top_level_prompt
     + "Specifically, your subagent has this task: "
     + process_refund_subagent_prompt,
     tools=[process_refund],

@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 # Constants
 ELIGIBLE_SHIPPING_METHODS = ["INSURED"]
-ELIGIBLE_REASONS = ["DAMAGED", "NEVER_ARRIVED"]
+ELIGIBLE_REASONS = ["DAMAGED", "NEVER_ARRIVED", "LOST"]
 
 _, project_id = google.auth.default()
 google_cloud_project = os.getenv("GOOGLE_CLOUD_PROJECT")
@@ -87,7 +87,7 @@ def get_purchase_history(purchaser: str) -> List[Dict[str, Any]]:
         return []
 
 
-def get_purchase_history_old(purchaser: str) -> List[Dict[str, Any]]:
+
     """
     Retrieve purchase history for a given customer.
 
@@ -248,15 +248,37 @@ def send_email_tool(to: str, subject: str, body: str) -> str:
     return send_email(to, subject, body)
 
 
+# def send_email(to: str, subject: str, body: str) -> str:
+#     creds = Credentials.from_service_account_file("/home/student_00_8e26a808a0c5/tools/service-account.json", scopes=["https://www.googleapis.com/auth/gmail.send"])
+#     service = build("gmail", "v1", credentials=creds)
+
+#     message = MIMEText(body)
+#     message["to"] = "krishenndud@gmail.com"
+#     message["subject"] = subject
+#     raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+#     message_body = {"raw": raw}
+
+#     sent = service.users().messages().send(userId="me", body=message_body).execute()
+#     return f"Email sent to {to} with ID: {sent['id']}"
+
 def send_email(to: str, subject: str, body: str) -> str:
-    creds = Credentials.from_service_account_file("/home/student_00_8e26a808a0c5/tools/service-account.json", scopes=["https://www.googleapis.com/auth/gmail.send"])
-    service = build("gmail", "v1", credentials=creds)
+    logger.info(f"Going to send mail to {to}")
+    try:
+        impersonated_user = "krishnendud@gmail.com"
+        creds = Credentials.from_service_account_file("/home/student_00_8e26a808a0c5/tools/service-account.json", 
+                scopes=["https://www.googleapis.com/auth/gmail.send"],                
+                subject=impersonated_user
+        )
+        service = build("gmail", "v1", credentials=creds)
 
-    message = MIMEText(body)
-    message["to"] = "krishenndud@gmail.com"
-    message["subject"] = subject
-    raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
-    message_body = {"raw": raw}
+        message = MIMEText(body)
+        message["to"] = to
+        message["subject"] = subject
+        raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+        message_body = {"raw": raw}
 
-    sent = service.users().messages().send(userId="me", body=message_body).execute()
-    return f"Email sent to {to} with ID: {sent['id']}"
+        sent = service.users().messages().send(userId="me", body=message_body).execute()
+        return f"Email sent to {to} with ID: {sent['id']}"
+    except Exception as e:
+        logger.error(f"Error sending email: {e}")
+        return f"Error occured in sending mail to {to}"
