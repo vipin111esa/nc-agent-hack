@@ -311,7 +311,7 @@ textarea, input, .gr-textbox {
                   <div style="font-weight:600; margin-bottom:8px;">What this app does</div>
                   <div style="font-size:13px; opacity:0.9; line-height:1.7;">
                     <ul style="margin: 8px 0 0 18px;">
-                      <li>This is a <b>ReclaimBot for Click Kart Online</b> in parallel.</li>
+                      <li>This is a <b>ReclaimBot for Click Kart Online</b> .</li>
                       <li>Which Verifies <b>Customer Name and Order</b> and <b>Checks Eligibility for Refund</b>.</li>
                       <li>If <b>Refund Eligibility meets Criteria</b>, then Refund is issued and a confirmation email is sent.</li>
                     </ul>
